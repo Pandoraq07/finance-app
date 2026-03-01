@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PERSONAL FINANCE APP</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="app-header">
+        <h1>My Spending Dashboard</h1>
+        <button id="logoutBtn" class="logout-btn">Logout</button>
+    </header>
+    <section class="summary">
+        <div>
+            <h3>Total Spent</h3>
+            <p>₦0</p>
+        </div>
+        
+        <div>
+            <h3>This Month</h3>
+            <p>₦0</p>
+        </div>
+
+        <div>
+            <h3>Top Category</h3>
+            <p>None</p>
+        </div>
+    </section>
+    <button id="reset-btn">Reset all Expense</button>
+    <h2>Add Expenses</h2>
+    <form id="expenseForm">
+        <input type="number" placeholder="Amount" required>
+        <select required>
+            <option value="">Select Category</option>
+            <option>Groceries</option>
+            <option>Food</option>
+            <option>Transport</option>
+            <option>Electricity Bill</option>
+            <option>Medical Bill</option>
+            <option>Phone bill & Data</option>
+            <option>Savings</option>
+            <option>Personal Care</option>
+            <option>Gifts</option>
+            <option>Travel</option>
+            <option>Entertainment</option>
+            <option>Betting</option>
+            <option>Investments</option>
+            <option>Others</option>
+        </select>
+
+        <input type="date" id="expense-date" required>
+
+        <button type="submit">Add Expense</button>
+    </form>
+    <h2>Expenses</h2>
+    <table class="expense-table">
+        <thead>
+            <tr>
+                <th>Amount</th>
+                <th>Category</th>
+                <th>Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+    <script src="script.js"></script>
+</body>
+</html>

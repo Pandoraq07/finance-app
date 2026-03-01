@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="login-wrapper">
+        <div class="login-form full">
+            <h2>Create Account</h2>
+            <form id="registerForm">
+                <input type="email" id="regEmail" placeholder="Email" required>
+                <input type="password" id="regPassword" placeholder="Password" required>
+                <button type="submit">Register</button>
+            </form>
+            <p id="regError" class="error"></p>
+            <p class="switch">
+                Already have an account?
+                <a href="login.html">Login</a>
+            </p>
+            <p class="subtext">Secure your finances. One step at a time.</p>
+        </div>
+    </div>
+    <script src="auth.js"></script>
+    <script>
+        const form = document.getElementById('registerForm');
+        const error = document.getElementById('regError');
+        const regEmail = document.getElementById('regEmail');
+        const regPassword = document.getElementById('regPassword');
+
+        form.addEventListener("submit", function(e){
+            e.preventDefault();
+            const email = regEmail.value.trim();
+            const password = regPassword.value.trim();
+
+            const result = registerUser(email, password);
+
+            if(!result.success){
+            error.textContent = result.message;
+            return;
+            }
+            window.location.href = "../login_auth/login.html";
+        });
+    </script>
+</body>
+</html>
