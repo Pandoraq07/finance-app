@@ -1,48 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinPal — Create Account</title>
+  <link rel="stylesheet" href="auth-style.css">
 </head>
 <body>
-    <div class="login-wrapper">
-        <div class="login-form full">
-            <h2>Create Account</h2>
-            <form id="registerForm">
-                <input type="email" id="regEmail" placeholder="Email" required>
-                <input type="password" id="regPassword" placeholder="Password" required>
-                <button type="submit">Register</button>
-            </form>
-            <p id="regError" class="error"></p>
-            <p class="switch">
-                Already have an account?
-                <a href="login.html">Login</a>
-            </p>
-            <p class="subtext">Secure your finances. One step at a time.</p>
+  <div class="auth-grid"></div>
+
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div class="logo-mark">F</div>
+        <span class="logo-name">FinPal</span>
+      </div>
+
+      <h1 class="auth-title">Create account</h1>
+      <p class="auth-sub">Start tracking your finances today</p>
+
+      <form class="auth-form" id="registerForm">
+        <div class="input-group">
+          <label class="input-label" for="regEmail">Email</label>
+          <input class="auth-input" type="email" id="regEmail" placeholder="you@example.com" required autocomplete="email">
         </div>
+        <div class="input-group">
+          <label class="input-label" for="regPassword">Password</label>
+          <input class="auth-input" type="password" id="regPassword" placeholder="Aa, 1 number & symbol" required autocomplete="new-password" minlength="6">
+        </div>
+        <p class="password-requirements">Password must contain the following:</p>
+        <ul class="password-rules">
+          <li>At least 6 characters</li>
+          <li>One uppercase letter</li>
+          <li>One lowercase letter</li>
+          <li>One number</li>
+          <li>One special character</li>
+        </ul>
+        <p class="error-msg" id="regError"></p>
+      
+        <button class="auth-btn" type="submit">Create account</button>
+      </form>
+
+      <div class="auth-switch">
+        Already have an account? <a href="login.html">Sign in</a>
+      </div>
+      <p class="auth-tagline">Your data stays on your device. Always.</p>
     </div>
-    <script src="auth.js"></script>
-    <script>
-        const form = document.getElementById('registerForm');
-        const error = document.getElementById('regError');
-        const regEmail = document.getElementById('regEmail');
-        const regPassword = document.getElementById('regPassword');
+  </div>
 
-        form.addEventListener("submit", function(e){
-            e.preventDefault();
-            const email = regEmail.value.trim();
-            const password = regPassword.value.trim();
+  <script src="auth.js"></script>
+  <script>
+    const form = document.getElementById('registerForm');
+    const regError = document.getElementById('regError');
 
-            const result = registerUser(email, password);
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      regError.textContent = '';
 
-            if(!result.success){
-            error.textContent = result.message;
-            return;
-            }
-            window.location.href = "../login_auth/login.html";
-        });
-    </script>
+      const email = document.getElementById('regEmail').value.trim();
+      const password = document.getElementById('regPassword').value.trim();
+
+      const passwordRules = [
+        {
+          valid: password.length >= 6,
+          message: 'Password must be at least 6 characters',
+        },
+        {
+          valid: /[A-Z]/.test(password),
+          message: 'Password must contain at least one uppercase letter',
+        },
+        {
+          valid: /[a-z]/.test(password),
+          message: 'Password must contain at least one lowercase letter',
+        },
+        {
+          valid: /[0-9]/.test(password),
+          message: 'Password must contain at least one number',
+        },
+        {
+          valid: /[^A-Za-z0-9]/.test(password),
+          message: 'Password must contain at least one special character',
+        },
+      ];
+
+      const failedRule = passwordRules.find(rule => !rule.valid);
+
+      if (failedRule) {
+        regError.textContent = failedRule.message;
+        return;
+      }
+      const result = await registerUser(email, password);
+
+      if (!result.success) {
+        regError.textContent = result.message;
+        return;
+      }
+      window.location.href = 'login.html';
+    });
+  </script>
 </body>
 </html>

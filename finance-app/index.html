@@ -1,72 +1,176 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PERSONAL FINANCE APP</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinPal — Dashboard</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div class="app-wrapper">
+
+    <!-- HEADER -->
     <header class="app-header">
-        <h1>My Spending Dashboard</h1>
-        <button id="logoutBtn" class="logout-btn">Logout</button>
+      <div class="header-left">
+        <div class="logo-mark">F</div>
+        <div>
+          <div class="app-name">FinPal</div>
+          <div class="app-tagline">Your money, your control!</div>
+        </div>
+      </div>
+      <div class="header-right">
+        <button class="theme-toggle" id="themeToggle" title="Toggle theme" aria-label="Toggle dark mode"></button>
+        <span class="plan-badge" id="planBadge">Free</span>
+        <button class="btn btn-premium btn-sm" id="subscribeBtn" type="button">Subscribe</button>
+        <div class="user-badge">
+          <div class="user-avatar" id="userAvatar">U</div>
+          <span class="user-email" id="userEmail">user@email.com</span>
+        </div>
+        <button class="btn logout-btn" id="logoutBtn">Logout</button>
+      </div>
     </header>
+
+    <!-- SUMMARY CARDS -->
     <section class="summary">
-        <div>
-            <h3>Total Spent</h3>
-            <p>₦0</p>
-        </div>
-        
-        <div>
-            <h3>This Month</h3>
-            <p>₦0</p>
-        </div>
-
-        <div>
-            <h3>Top Category</h3>
-            <p>None</p>
-        </div>
+      <div class="summary-card">
+        <div class="card-label">Total Spent</div>
+        <div class="card-value" id="totalSpent"><span class="currency">₦</span>0.00</div>
+        <div class="card-sub">All time</div>
+      </div>
+      <div class="summary-card">
+        <div class="card-label">This Month</div>
+        <div class="card-value" id="thisMonth"><span class="currency">₦</span>0.00</div>
+        <div class="card-sub" id="currentMonthLabel">—</div>
+      </div>
+      <div class="summary-card">
+        <div class="card-label">Top Category</div>
+        <div class="card-value" id="topCategory" style="font-size:18px; margin-top:4px;">None</div>
+        <div class="card-sub">By total spend</div>
+      </div>
     </section>
-    <button id="reset-btn">Reset all Expense</button>
-    <h2>Add Expenses</h2>
-    <form id="expenseForm">
-        <input type="number" placeholder="Amount" required>
-        <select required>
-            <option value="">Select Category</option>
-            <option>Groceries</option>
-            <option>Food</option>
-            <option>Transport</option>
-            <option>Electricity Bill</option>
-            <option>Medical Bill</option>
-            <option>Phone bill & Data</option>
-            <option>Savings</option>
-            <option>Personal Care</option>
-            <option>Gifts</option>
-            <option>Travel</option>
-            <option>Entertainment</option>
-            <option>Betting</option>
-            <option>Investments</option>
-            <option>Others</option>
-        </select>
 
-        <input type="date" id="expense-date" required>
+    <!-- ADD EXPENSE -->
+    <div class="section-header">
+      <h2 class="section-title">Add Expense</h2>
+      <span id="editingBadge" style="display:none; font-size:12px; color:var(--amber); font-weight:500;">✏️ Editing expense</span>
+    </div>
 
-        <button type="submit">Add Expense</button>
-    </form>
-    <h2>Expenses</h2>
-    <table class="expense-table">
-        <thead>
+    <div class="form-card" id="formCard">
+      <form id="expenseForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="amountInput">Amount (₦)</label>
+            <input class="form-input" type="number" id="amountInput" name="amount" placeholder="0.00" min="0.01" step="0.01" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="categorySelect">Category</label>
+            <select class="form-select" id="categorySelect" name="category" required>
+              <option value="">Select category</option>
+              <option>Groceries</option>
+              <option>Food</option>
+              <option>Transport</option>
+              <option>Electricity Bill</option>
+              <option>Medical Bill</option>
+              <option>Phone bill &amp; Data</option>
+              <option>Savings</option>
+              <option>Personal Care</option>
+              <option>Gifts</option>
+              <option>Travel</option>
+              <option>Entertainment</option>
+              <option>Betting</option>
+              <option>Investments</option>
+              <option>Others</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="dateInput">Date</label>
+            <input class="form-input" type="date" id="dateInput" name="date" required>
+          </div>
+          <div style="display:flex; gap:8px; align-items:flex-end;">
+            <button class="btn btn-primary" type="submit" id="submitBtn">
+              <span id="submitLabel">+ Add</span>
+            </button>
+            <button class="btn btn-ghost btn-sm" type="button" id="cancelEditBtn" style="display:none;">Cancel</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- EXPENSES TABLE -->
+    <div class="top-actions">
+      <h2 class="section-title">Expenses</h2>
+      <button class="btn btn-danger btn-sm" id="resetBtn">🗑 Reset all</button>
+    </div>
+
+    <div class="table-card">
+      <div class="table-toolbar">
+        <span class="section-title" style="font-size:13px; color:var(--text2);" id="expenseCount">0 expenses</span>
+      </div>
+      <div id="tableContainer">
+        <table class="expense-table" id="expenseTable">
+          <thead>
             <tr>
-                <th>Amount</th>
-                <th>Category</th>
-                <th>Date</th>
-                <th>Action</th>
+              <th>Amount</th>
+              <th>Category</th>
+              <th>Date</th>
+              <th>Actions</th>
             </tr>
-        </thead>
-        <tbody>
+          </thead>
+          <tbody id="expenseBody"></tbody>
+        </table>
+        <div class="empty-state" id="emptyState" style="display:none;">
+          <div class="empty-icon">💸</div>
+          <div class="empty-title">No expenses yet</div>
+          <div class="empty-sub">Add your first expense above to get started</div>
+        </div>
+      </div>
+    </div>
 
-        </tbody>
-    </table>
-    <script src="script.js"></script>
+  </div><!-- /.app-wrapper -->
+
+  <div class="modal-backdrop" id="premiumModal" aria-hidden="true">
+    <div class="premium-modal" role="dialog" aria-modal="true" aria-labelledby="premiumTitle">
+      <button class="modal-close" id="closePremiumModal" type="button" aria-label="Close premium modal">x</button>
+      <div class="modal-eyebrow">FinPal Premium</div>
+      <h2 class="modal-title" id="premiumTitle">Unlock deeper money insights</h2>
+      <p class="modal-copy">Subscribe to access advanced tools built for reports, planning, and better spending decisions.</p>
+      <div class="modal-feature-list">
+        <div class="modal-feature">
+          <strong>Statements</strong>
+          <span>Download monthly CSV/PDF reports.</span>
+        </div>
+        <div class="modal-feature">
+          <strong>Pie Charts</strong>
+          <span>See category breakdowns at a glance.</span>
+        </div>
+        <div class="modal-feature">
+          <strong>Income Tracking</strong>
+          <span>Track salary, business, and side income.</span>
+        </div>
+      </div>
+      <button class="btn btn-primary premium-activate-btn" id="activatePremiumBtn" type="button">Activate Premium</button>
+      <p class="modal-note">Mock activation for now. Paystack will replace this step later.</p>
+    </div>
+  </div>
+
+  <script src="../login_auth/auth.js"></script>
+  <script src="script.js"></script>
+  <script>
+    // Theme toggle
+    const html = document.documentElement;
+    const toggleBtn = document.getElementById('themeToggle');
+    const saved = localStorage.getItem('finpal_theme') || 'light';
+    html.setAttribute('data-theme', saved);
+
+    toggleBtn.addEventListener('click', () => {
+      const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('finpal_theme', next);
+    });
+
+    // Current month label
+    document.getElementById('currentMonthLabel').textContent =
+      new Date().toLocaleString('en-NG', { month: 'long', year: 'numeric' });
+  </script>
 </body>
 </html>

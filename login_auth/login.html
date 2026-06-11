@@ -1,48 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinPal — Login</title>
+  <link rel="stylesheet" href="auth-style.css">
 </head>
 <body>
-    <div class="login-wrapper">
-        <div class="login-form full">
-            <h2>Welcome Back</h2>
-            <form id="loginForm">
-                <input type="email" id="email" placeholder="Email" required>
-                <input type="password" id="password" placeholder="Password" required>
-                <button type="submit">Login</button>
-            </form>
-            <p id="errorMsg" class="error"></p>
-            <p class="switch">
-                Don't have an account?
-                <a href="register.html">Register</a>
-            </p>
-            <p class="subtext">Track your spending and stay on budget.</p>
+  <div class="auth-grid"></div>
+
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div class="logo-mark">F</div>
+        <span class="logo-name">FinPal</span>
+      </div>
+
+      <h1 class="auth-title">Welcome back</h1>
+      <p class="auth-sub">Sign in to your account</p>
+
+      <form class="auth-form" id="loginForm">
+        <div class="input-group">
+          <label class="input-label" for="email">Email</label>
+          <input class="auth-input" type="email" id="email" placeholder="you@example.com" required autocomplete="email">
         </div>
+        <div class="input-group">
+          <label class="input-label" for="password">Password</label>
+          <input class="auth-input" type="password" id="password" placeholder="••••••••" required autocomplete="current-password">
+        </div>
+        <p class="error-msg" id="errorMsg"></p>
+        <button class="auth-btn" type="submit">Sign in</button>
+      </form>
+
+      <div class="auth-switch">
+        Don't have an account? <a href="register.html">Create one</a>
+      </div>
+      <p class="auth-tagline">Track your spending. Own your future.</p>
     </div>
-    <script src="auth.js"></script>
-    <script>
-        const form = document.getElementById("loginForm");
-        const error = document.getElementById("errorMsg");
-        const emailInput = document.getElementById('email');
-        const passwordInput = document.getElementById('password');
+  </div>
 
-        form.addEventListener("submit", function(e){
-            e.preventDefault();
-            const email = emailInput.value.trim();
-            const password = passwordInput.value.trim();
+  <script src="auth.js"></script>
+  <script>
+    const form = document.getElementById('loginForm');
+    const errorMsg = document.getElementById('errorMsg');
 
-            const result = loginUser(email, password);
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      errorMsg.textContent = '';
 
-            if(!result.success){
-                error.textContent = result.message;
-                return;
-            }
-            window.location.href = "../finance-app/index.html";
-        });
-    </script>
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      const result = await loginUser(email, password);
+      
+      if (!result.success) {
+        errorMsg.textContent = result.message;
+        return;
+      }
+      window.location.href = '../finance-app/index.html';
+    });
+  </script>
 </body>
 </html>
